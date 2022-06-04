@@ -31,9 +31,13 @@ jobs:
           role-to-assume: ${{ secrets.AWS_ROLE_TO_ASSUME }}
           aws-region: ${{ env.AWS_REGION }}
 
-      - name: Login to Amazon ECR
+      - name: Login to Public ECR
         id: login-ecr
-        uses: aws-actions/amazon-ecr-login@v1
+        uses: docker/login-action@v2
+        with:
+          registry: public.ecr.aws
+        env:
+          AWS_REGION: ${{ env.AWS_REGION }}
 
       - name: Build, tag, and push image to Amazon ECR
         env:
