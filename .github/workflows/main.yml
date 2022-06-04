@@ -41,7 +41,7 @@ jobs:
 
       - name: Build, tag, and push image to Amazon ECR
         env:
-          ECR_REGISTRY: public.ecr.aws
+          ECR_REGISTRY: public.ecr.aws/v8j8i1v3
           ECR_REPOSITORY: prerender-url
           IMAGE_TAG: ${{ github.sha }}
         run: |
