@@ -29,6 +29,7 @@ WORKDIR ${FUNCTION_DIR}
 RUN npm install --target_arch=x64 --target_platform=linux
 
 # If the dependency is not in package.json uncomment the following line
+RUN wget -O cmake-install https://github.com/Kitware/CMake/releases/download/v3.13.0/cmake-3.13.0-Linux-x86_64.sh; \
 RUN npm install aws-lambda-ric
 
 # Grab a fresh slim copy of the image to reduce the final size
