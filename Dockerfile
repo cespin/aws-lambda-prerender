@@ -21,6 +21,11 @@ COPY app.js package.json ${FUNCTION_DIR}/
 
 WORKDIR ${FUNCTION_DIR}
 
+# Uncomment to skip the chromium download when installing puppeteer. If you do,
+# you'll need to launch puppeteer with:
+#     browser.launch({executablePath: 'google-chrome-stable'})
+ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD true
+
 # If the dependency is not in package.json uncomment the following line
 # RUN npm install aws-lambda-ric
 
@@ -43,11 +48,6 @@ RUN apt-get update \
     && apt-get install -y google-chrome-stable fonts-ipafont-gothic fonts-wqy-zenhei fonts-thai-tlwg fonts-kacst fonts-freefont-ttf libxss1 \
       --no-install-recommends \
     && rm -rf /var/lib/apt/lists/*
-
-# Uncomment to skip the chromium download when installing puppeteer. If you do,
-# you'll need to launch puppeteer with:
-#     browser.launch({executablePath: 'google-chrome-stable'})
-ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD true
 
 # Set working directory to function root directory
 WORKDIR ${FUNCTION_DIR}
