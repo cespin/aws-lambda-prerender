@@ -17,7 +17,7 @@ RUN apt-get update && \
 
 # Copy function code
 RUN mkdir -p ${FUNCTION_DIR}
-COPY app.js package.json ${FUNCTION_DIR}
+COPY app.js package.json ${FUNCTION_DIR}/
 
 WORKDIR ${FUNCTION_DIR}
 
