@@ -41,7 +41,6 @@ const wait = () => new Promise(resolve => {
 
 const prerender = async uri =>
     puppeteer.launch({
-        executablePath: 'google-chrome-stable',
         args: [
             '--allow-running-insecure-content',
             '--autoplay-policy=user-gesture-required',
