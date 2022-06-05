@@ -59,7 +59,7 @@ RUN groupadd -r pptruser && useradd -r -g pptruser -G audio,video pptruser \
     && mkdir -p /home/pptruser/Downloads
 
 # Copy in the built dependencies
-COPY --from=build-image ${FUNCTION_DIR} /home/pptruser${FUNCTION_DIR}
+COPY --from=build-image ${FUNCTION_DIR} /home/pptruser
 
 RUN chown -R pptruser:pptruser /home/pptruser
 
@@ -70,4 +70,4 @@ WORKDIR /home/pptruser
 USER pptruser
 
 ENTRYPOINT ["/usr/local/bin/npx", "aws-lambda-ric"]
-CMD ["function/app.lambdaHandler"]
+CMD ["app.lambdaHandler"]
