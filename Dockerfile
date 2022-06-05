@@ -1,7 +1,7 @@
 # Define custom function directory
 ARG FUNCTION_DIR="/function"
 
-FROM node:16-stretch as build-image
+FROM node:14-stretch as build-image
 
 # Include global arg in this stage of the build
 ARG FUNCTION_DIR
@@ -28,8 +28,11 @@ WORKDIR ${FUNCTION_DIR}
 
 RUN npm install --target_arch=x64 --target_platform=linux
 
+# If the dependency is not in package.json uncomment the following line
+RUN npm install aws-lambda-ric
+
 # Grab a fresh slim copy of the image to reduce the final size
-FROM node:16-slim
+FROM node:14-slim
 
 # Include global arg in this stage of the build
 ARG FUNCTION_DIR

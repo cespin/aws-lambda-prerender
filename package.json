@@ -6,7 +6,6 @@
   "author": "Carlos Espin",
   "license": "MIT",
   "dependencies": {
-    "aws-lambda-ric": "^2.0.0",
     "aws-sdk": "^2.1148.0",
     "puppeteer": "^14.2.1"
   },
