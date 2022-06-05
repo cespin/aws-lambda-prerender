@@ -12,9 +12,9 @@ const sha1 = text => crypto.createHash("sha1")
 
 const httpBasicAuth = JSON.parse(process.env.ENV_TO_USER_PASS);
 
-const basicHttpAuthorization = async page => {
+const basicHttpAuthorization = page => {
     if (!httpBasicAuth[process.env.ENV]) {
-        return;
+        return Promise.resolve();
     }
     return page.authenticate({"username": httpBasicAuth[process.env.ENV]["username"], "password": httpBasicAuth[process.env.ENV]["password"]});
 }
@@ -39,7 +39,7 @@ const wait = () => new Promise(resolve => {
     setTimeout(resolve, 2000);
 });
 
-const prerender = async uri =>
+const prerender = uri =>
     puppeteer.launch({
         executablePath: 'google-chrome-stable',
         args: [
@@ -104,10 +104,10 @@ const save = (content, uri) =>
         console.info("Saving the pre-rendered uri %s returned %j", uri, result);
     });
 
-const processRecord = async record => {
+const processRecord = record => {
     if (record.eventSourceARN.includes("prerenderdlqueue")) {
         console.warn("Received a message through the Dead-Letter queue:\n%j", record);
-        return;
+        return Promise.resolve();
     }
 
     let message;
@@ -116,19 +116,19 @@ const processRecord = async record => {
     } catch (e) {
         console.warn("Omitting a message, couldn't parse");
         console.warn(e, e.stack);
-        return;
+        return Promise.resolve();
     }
 
     if (!message.uri) {
         console.warn("Unexpected message received: ", JSON.stringify(message));
-        return;
+        return Promise.resolve();
     }
 
     return prerender(message.uri)
         .then(content => save(content, message.uri));
 };
 
-exports.lambdaHandler = async (event) => {
+exports.lambdaHandler = (event) => {
     console.debug("Received:\n%j", event);
 
     if (!event.Records || !Array.isArray(event.Records)) {
