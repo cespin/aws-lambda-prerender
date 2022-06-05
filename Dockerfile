@@ -63,11 +63,11 @@ COPY --from=build-image ${FUNCTION_DIR} /home/pptruser${FUNCTION_DIR}
 
 RUN chown -R pptruser:pptruser /home/pptruser
 
-# Set working directory to function root directory
-WORKDIR /home/pptruser${FUNCTION_DIR}
+# Set working directory to pptuser's home
+WORKDIR /home/pptruser
 
 # Run everything after as non-privileged user.
 USER pptruser
 
 ENTRYPOINT ["/usr/local/bin/npx", "aws-lambda-ric"]
-CMD ["app.lambdaHandler"]
+CMD ["function/app.lambdaHandler"]
