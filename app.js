@@ -42,7 +42,7 @@ const wait = () => new Promise(resolve => {
 const prerender = async uri =>
     puppeteer.launch({
         executablePath: 'google-chrome-stable',
-        args: [
+        // args: [
             // '--allow-running-insecure-content',
             // '--autoplay-policy=user-gesture-required',
             // '--disable-component-update',
@@ -67,9 +67,9 @@ const prerender = async uri =>
             // '--window-size=1920,1080',
             // '--single-process',
             // '--disable-dev-shm-usage',
-            '--no-sandbox',
-            '--disable-setuid-sandbox'
-        ],
+            // '--no-sandbox',
+            // '--disable-setuid-sandbox'
+        // ],
         defaultViewport: {
             deviceScaleFactor: 1,
             hasTouch: false,

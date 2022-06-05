@@ -53,11 +53,21 @@ RUN apt-get update \
       --no-install-recommends \
     && rm -rf /var/lib/apt/lists/*
 
-# Set working directory to function root directory
-WORKDIR ${FUNCTION_DIR}
+    # Add user so we don't need --no-sandbox.
+    # same layer as npm install to keep re-chowned files from using up several hundred MBs more space
+RUN groupadd -r pptruser && useradd -r -g pptruser -G audio,video pptruser \
+    && mkdir -p /home/pptruser/Downloads
 
 # Copy in the built dependencies
-COPY --from=build-image ${FUNCTION_DIR} ${FUNCTION_DIR}
+COPY --from=build-image ${FUNCTION_DIR} /home/pptruser${FUNCTION_DIR}
+
+RUN chown -R pptruser:pptruser /home/pptruser
+
+# Set working directory to function root directory
+WORKDIR /home/pptruser${FUNCTION_DIR}
+
+# Run everything after as non-privileged user.
+USER pptruser
 
 ENTRYPOINT ["/usr/local/bin/npx", "aws-lambda-ric"]
 CMD ["app.lambdaHandler"]
