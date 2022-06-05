@@ -42,14 +42,14 @@ const wait = () => new Promise(resolve => {
 const prerender = async uri =>
     puppeteer.launch({
         executablePath: 'google-chrome-stable',
-        // args: [
+        args: [
             // '--allow-running-insecure-content',
             // '--autoplay-policy=user-gesture-required',
             // '--disable-component-update',
             // '--disable-domain-reliability',
             // '--disable-features=AudioServiceOutOfProcess,IsolateOrigins,site-per-process',
             // '--disable-print-preview',
-            // '--disable-setuid-sandbox',
+            '--disable-setuid-sandbox',
             // '--disable-site-isolation-trials',
             // '--disable-speech-api',
             // '--disable-web-security',
@@ -66,10 +66,8 @@ const prerender = async uri =>
             // '--use-gl=swiftshader',
             // '--window-size=1920,1080',
             // '--single-process',
-            // '--disable-dev-shm-usage',
-            // '--no-sandbox',
-            // '--disable-setuid-sandbox'
-        // ],
+            // '--disable-dev-shm-usage'
+        ],
         defaultViewport: {
             deviceScaleFactor: 1,
             hasTouch: false,
