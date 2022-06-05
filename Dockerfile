@@ -1,7 +1,7 @@
 # Define custom function directory
 ARG FUNCTION_DIR="/function"
 
-FROM node:18-buster as build-image
+FROM node:16-buster as build-image
 
 # Include global arg in this stage of the build
 ARG FUNCTION_DIR
@@ -32,7 +32,7 @@ ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD true
 RUN npm install --target_arch=x64 --target_platform=linux
 
 # Grab a fresh slim copy of the image to reduce the final size
-FROM node:18-buster-slim
+FROM node:16-buster-slim
 
 # Include global arg in this stage of the build
 ARG FUNCTION_DIR
