@@ -66,7 +66,9 @@ const prerender = async uri =>
             // '--use-gl=swiftshader',
             // '--window-size=1920,1080',
             // '--single-process',
-            '--disable-dev-shm-usage'
+            '--disable-dev-shm-usage',
+            '--no-sandbox',
+            '--disable-setuid-sandbox'
         ],
         defaultViewport: {
             deviceScaleFactor: 1,
