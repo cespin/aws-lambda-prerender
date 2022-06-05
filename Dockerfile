@@ -1,7 +1,7 @@
 # Define custom function directory
 ARG FUNCTION_DIR="/function"
 
-FROM node:14-buster as build-image
+FROM node:14-stretch as build-image
 
 # Include global arg in this stage of the build
 ARG FUNCTION_DIR
@@ -29,7 +29,7 @@ WORKDIR ${FUNCTION_DIR}
 RUN npm install --target_arch=x64 --target_platform=linux
 
 # Grab a fresh slim copy of the image to reduce the final size
-FROM node:14-buster-slim
+FROM node:14-slim
 
 # Include global arg in this stage of the build
 ARG FUNCTION_DIR
