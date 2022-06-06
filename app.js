@@ -41,7 +41,7 @@ const wait = () => new Promise(resolve => {
 
 const prerender = uri =>
     puppeteer.launch({
-        executablePath: 'google-chrome-stable',
+        // executablePath: 'google-chrome-stable',
         args: [
             '--aggressive-cache-discard',
             '--disable-cache',
