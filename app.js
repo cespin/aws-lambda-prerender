@@ -41,7 +41,7 @@ const wait = () => new Promise(resolve => {
 
 const prerender = uri =>
     puppeteer.launch({
-        // executablePath: 'google-chrome-stable',
+        executablePath: 'google-chrome-stable',
         args: [
             '--aggressive-cache-discard',
             '--disable-cache',
@@ -66,17 +66,16 @@ const prerender = uri =>
             '--disable-sync',
             // '--allow-running-insecure-content',
             // '--disable-features=AudioServiceOutOfProcess,IsolateOrigins,site-per-process',
-            // '--disable-print-preview',
+            '--disable-print-preview',
             '--disable-setuid-sandbox',
-            // '--disable-site-isolation-trials',
-            // '--disable-speech-api',
-            // '--disable-web-security',
-            // '--disk-cache-size=33554432',
+            '--disable-site-isolation-trials',
+            '--disable-speech-api',
+            '--disable-web-security',
             // '--enable-features=SharedArrayBuffer',
-            // '--hide-scrollbars',
+            '--hide-scrollbars',
             // '--ignore-gpu-blocklist',
             // '--in-process-gpu',
-            // '--no-pings',
+            '--no-pings',
             '--no-sandbox',
             '--no-zygote',
             // '--use-gl=swiftshader',
