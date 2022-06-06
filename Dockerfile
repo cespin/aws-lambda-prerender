@@ -53,18 +53,18 @@ RUN apt-get update \
       --no-install-recommends \
     && rm -rf /var/lib/apt/lists/*
 
+# Copy in the built dependencies
+COPY --from=build-image ${FUNCTION_DIR} ${FUNCTION_DIR}
+
     # Add user so we don't need --no-sandbox.
     # same layer as npm install to keep re-chowned files from using up several hundred MBs more space
 RUN groupadd -r pptruser && useradd -r -g pptruser -G audio,video pptruser \
-    && mkdir -p /home/pptruser/Downloads
+    && mkdir -p /home/pptruser/Downloads \
+    && chown -R pptruser:pptruser /home/pptruser \
+    && chown -R pptruser:pptruser ${FUNCTION_DIR}
 
-# Copy in the built dependencies
-COPY --from=build-image ${FUNCTION_DIR} /home/pptruser
-
-RUN chown -R pptruser:pptruser /home/pptruser
-
-# Set working directory to pptuser's home
-WORKDIR /home/pptruser
+# Set working directory to function root directory
+WORKDIR ${FUNCTION_DIR}
 
 # Run everything after as non-privileged user.
 USER pptruser
