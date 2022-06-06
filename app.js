@@ -81,7 +81,7 @@ const prerender = uri =>
             '--no-zygote',
             // '--use-gl=swiftshader',
             // '--window-size=1920,1080',
-            // '--single-process',
+            '--single-process',
             '--disable-dev-shm-usage'
         ],
         defaultViewport: {
