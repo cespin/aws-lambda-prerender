@@ -65,9 +65,6 @@ const prerender = uri =>
             '--disable-domain-reliability',
             '--disable-sync',
             // '--allow-running-insecure-content',
-            // '--autoplay-policy=user-gesture-required',
-            // '--disable-component-update',
-            // '--disable-domain-reliability',
             // '--disable-features=AudioServiceOutOfProcess,IsolateOrigins,site-per-process',
             // '--disable-print-preview',
             '--disable-setuid-sandbox',
@@ -79,15 +76,13 @@ const prerender = uri =>
             // '--hide-scrollbars',
             // '--ignore-gpu-blocklist',
             // '--in-process-gpu',
-            // '--mute-audio',
-            // '--no-default-browser-check',
             // '--no-pings',
             '--no-sandbox',
             '--no-zygote',
             // '--use-gl=swiftshader',
             // '--window-size=1920,1080',
             // '--single-process',
-            // '--disable-dev-shm-usage'
+            '--disable-dev-shm-usage'
         ],
         defaultViewport: {
             deviceScaleFactor: 1,
