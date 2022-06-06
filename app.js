@@ -64,7 +64,7 @@ const prerender = uri =>
             '--disable-component-update',
             '--disable-domain-reliability',
             '--disable-sync',
-            // '--allow-running-insecure-content',
+            '--allow-running-insecure-content',
             // '--disable-features=AudioServiceOutOfProcess,IsolateOrigins,site-per-process',
             '--disable-print-preview',
             '--disable-setuid-sandbox',
