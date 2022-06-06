@@ -62,7 +62,7 @@ const prerender = uri =>
             // '--no-default-browser-check',
             // '--no-pings',
             '--no-sandbox',
-            // '--no-zygote',
+            '--no-zygote',
             // '--use-gl=swiftshader',
             // '--window-size=1920,1080',
             // '--single-process',
