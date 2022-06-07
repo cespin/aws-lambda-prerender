@@ -104,9 +104,9 @@ const prerender = uri =>
                     .then(() => dontFetchAssets(page))
                     .then(() => page.goto(url, {timeout: 10000, waitUntil: "networkidle0"}))
                     .then(() => wait())
-                    .then(() => page.content());
-            })
-            .finally(() => browser.close()));
+                    .then(() => page.content())
+                    .finally(() => page.close());
+            }));
 
 const save = (content, uri) =>
     s3.putObject({
