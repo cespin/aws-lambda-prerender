@@ -16,12 +16,15 @@ const basicHttpAuthorization = page => {
     if (!httpBasicAuth[process.env.ENV]) {
         return Promise.resolve();
     }
-    return page.authenticate({"username": httpBasicAuth[process.env.ENV]["username"], "password": httpBasicAuth[process.env.ENV]["password"]});
+    return page.authenticate({
+        "username": httpBasicAuth[process.env.ENV]["username"],
+        "password": httpBasicAuth[process.env.ENV]["password"]
+    });
 }
 
 const subdomains = JSON.parse(process.env.ENV_TO_SUBDOMAINS);
 
-const toURL = uri => "https://" + (subdomains[process.env.ENV] ?? process.env.ENV)  + "." +  process.env.DOMAIN_APEX + uri;
+const toURL = uri => "https://" + (subdomains[process.env.ENV] ?? process.env.ENV) + "." + process.env.DOMAIN_APEX + uri;
 
 const dontFetchAssets = page =>
     page.setRequestInterception(true)
@@ -39,74 +42,77 @@ const wait = () => new Promise(resolve => {
     setTimeout(resolve, 2000);
 });
 
+const browserInstance = puppeteer.launch({
+    // executablePath: 'google-chrome-stable',
+    args: [
+        '--aggressive-cache-discard',
+        '--disable-cache',
+        '--disable-application-cache',
+        '--disable-offline-load-stale-cache',
+        '--disable-gpu-shader-disk-cache',
+        '--media-cache-size=0',
+        '--disk-cache-size=0',
+        '--disable-extensions',
+        '--disable-component-extensions-with-background-pages',
+        '--disable-default-apps',
+        '--mute-audio',
+        '--no-default-browser-check',
+        '--autoplay-policy=user-gesture-required',
+        '--disable-background-timer-throttling',
+        '--disable-backgrounding-occluded-windows',
+        '--disable-notifications',
+        '--disable-background-networking',
+        '--disable-breakpad',
+        '--disable-component-update',
+        '--disable-domain-reliability',
+        '--disable-sync',
+        '--allow-running-insecure-content',
+        // '--disable-features=AudioServiceOutOfProcess,IsolateOrigins,site-per-process',
+        '--disable-print-preview',
+        '--disable-setuid-sandbox',
+        '--disable-site-isolation-trials',
+        '--disable-speech-api',
+        '--disable-web-security',
+        // '--enable-features=SharedArrayBuffer',
+        '--hide-scrollbars',
+        // '--ignore-gpu-blocklist',
+        // '--in-process-gpu',
+        '--no-pings',
+        '--no-sandbox',
+        '--no-zygote',
+        // '--use-gl=swiftshader',
+        // '--window-size=1920,1080',
+        '--single-process',
+        '--disable-dev-shm-usage'
+    ],
+    defaultViewport: {
+        deviceScaleFactor: 1,
+        hasTouch: false,
+        height: 1080,
+        isLandscape: true,
+        isMobile: false,
+        width: 1920,
+    },
+    headless: true,
+    ignoreHTTPSErrors: true
+});
+
 const prerender = uri =>
-    puppeteer.launch({
-        // executablePath: 'google-chrome-stable',
-        args: [
-            '--aggressive-cache-discard',
-            '--disable-cache',
-            '--disable-application-cache',
-            '--disable-offline-load-stale-cache',
-            '--disable-gpu-shader-disk-cache',
-            '--media-cache-size=0',
-            '--disk-cache-size=0',
-            '--disable-extensions',
-            '--disable-component-extensions-with-background-pages',
-            '--disable-default-apps',
-            '--mute-audio',
-            '--no-default-browser-check',
-            '--autoplay-policy=user-gesture-required',
-            '--disable-background-timer-throttling',
-            '--disable-backgrounding-occluded-windows',
-            '--disable-notifications',
-            '--disable-background-networking',
-            '--disable-breakpad',
-            '--disable-component-update',
-            '--disable-domain-reliability',
-            '--disable-sync',
-            '--allow-running-insecure-content',
-            // '--disable-features=AudioServiceOutOfProcess,IsolateOrigins,site-per-process',
-            '--disable-print-preview',
-            '--disable-setuid-sandbox',
-            '--disable-site-isolation-trials',
-            '--disable-speech-api',
-            '--disable-web-security',
-            // '--enable-features=SharedArrayBuffer',
-            '--hide-scrollbars',
-            // '--ignore-gpu-blocklist',
-            // '--in-process-gpu',
-            '--no-pings',
-            '--no-sandbox',
-            '--no-zygote',
-            // '--use-gl=swiftshader',
-            // '--window-size=1920,1080',
-            '--single-process',
-            '--disable-dev-shm-usage'
-        ],
-        defaultViewport: {
-            deviceScaleFactor: 1,
-            hasTouch: false,
-            height: 1080,
-            isLandscape: true,
-            isMobile: false,
-            width: 1920,
-        },
-        headless: true,
-        ignoreHTTPSErrors: true
-    }).then(browser =>
-        browser.newPage()
-            .then(page => {
-                const url = toURL(uri);
-                console.debug("Gonna prerender %s", url);
-                return page.setUserAgent(process.env.USER_AGENT ?? "Prerender User Agent")
-                    .then(() => page.setBypassCSP(true))
-                    .then(() => basicHttpAuthorization(page))
-                    .then(() => dontFetchAssets(page))
-                    .then(() => page.goto(url, {timeout: 10000, waitUntil: "networkidle0"}))
-                    .then(() => wait())
-                    .then(() => page.content())
-                    .finally(() => page.close());
-            }));
+    browserInstance
+        .then(browser =>
+            browser.newPage()
+                .then(page => {
+                    const url = toURL(uri);
+                    console.debug("Gonna prerender %s", url);
+                    return page.setUserAgent(process.env.USER_AGENT ?? "Prerender User Agent")
+                        .then(() => page.setBypassCSP(true))
+                        .then(() => basicHttpAuthorization(page))
+                        .then(() => dontFetchAssets(page))
+                        .then(() => page.goto(url, {timeout: 10000, waitUntil: "networkidle0"}))
+                        .then(() => wait())
+                        .then(() => page.content())
+                        .finally(() => page.close());
+                }));
 
 const save = (content, uri) =>
     s3.putObject({
